@@ -2,6 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wszystkiego najlepszego!</title>
   <style>
     body {
@@ -11,32 +12,41 @@
       background: linear-gradient(to bottom, #a0e0ff, #ffffff);
       text-align: center;
       color: #333;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
     h1 {
       margin-top: 40px;
-      font-size: 2.5em;
+      font-size: 2em;
       color: #0077cc;
       text-shadow: 1px 1px 2px #aaa;
+      padding: 0 10px;
     }
     p {
-      font-size: 1.2em;
+      font-size: 1em;
       margin: 20px auto;
-      max-width: 600px;
+      max-width: 90%;
       line-height: 1.5em;
+      padding: 0 10px;
     }
     img {
-      max-width: 300px;
+      max-width: 80%;
+      height: auto;
       border-radius: 15px;
       margin: 20px auto;
       display: block;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      cursor: pointer;
+      background: transparent;
     }
     .stars {
-      position: absolute;
+      position: fixed;
       width: 100%;
       height: 100%;
       pointer-events: none;
       overflow: hidden;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
     .star {
       position: absolute;
@@ -50,47 +60,127 @@
       from { opacity: 0.2; transform: scale(0.5);}
       to { opacity: 1; transform: scale(1.2);}
     }
-    a {
+    a.button {
       display: inline-block;
       margin-top: 30px;
-      padding: 10px 20px;
+      padding: 15px 25px;
       background: #0077cc;
       color: white;
       text-decoration: none;
       border-radius: 10px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      font-size: 1.2em;
       transition: background 0.3s;
     }
-    a:hover {
+    a.button:hover {
       background: #005fa3;
+    }
+    /* Konfetti */
+    #confetti {
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      overflow:hidden;
+      z-index: 999;
+    }
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: gold;
+      opacity: 0.9;
+      animation-name: fall;
+      animation-timing-function: linear;
+	  animation-fill-mode: forwards;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    @media (min-width: 600px) {
+      h1 { font-size: 2.5em; }
+      p { font-size: 1.2em; max-width: 600px; }
+      a.button { font-size: 1.5em; padding: 15px 35px; }
     }
   </style>
 </head>
 <body>
   <div class="stars" id="stars"></div>
 
-  <h1>Wszystkiego najlepszego, [imię]!</h1>
+  <h1>Wszystkiego najlepszego, Marta!</h1>
   <p>
     Oto mała niespodzianka od mnie 💙.  
     Mam nadzieję, że Twój dzień będzie pełen radości, uśmiechów i przygód, tak jak nasze wspólne gry, malowanie, rowerowe wyprawy i dubbing!  
     Kliknij w obrazek, aby odkryć coś specjalnego 🎁
   </p>
 
-  <a href="#"><img src="images/stitch.png" alt="Stitch" /></a>
+  <a href="#" id="stitch">
+    <img id="stitchImg" src="stitch.png" alt="Stitch" />
+  </a>
+
+  <div id="confetti"></div>
 
   <script>
-    // generowanie losowych gwiazdek w tle
+    // Gwiazdki w tle
     const starsContainer = document.getElementById('stars');
     for (let i=0; i<50; i++) {
       const star = document.createElement('div');
       star.classList.add('star');
       star.style.top = Math.random() * 100 + '%';
       star.style.left = Math.random() * 100 + '%';
-      star.style.width = (Math.random()*4+2) + 'px';
-      star.style.height = star.style.width;
+      let size = Math.random()*4+2;
+      star.style.width = size + 'px';
+      star.style.height = size + 'px';
       star.style.animationDuration = (Math.random()*3+1)+'s';
       starsContainer.appendChild(star);
     }
+
+	// Pobranie elementów
+	const stitch = document.getElementById('stitch');
+	const stitchImg = document.getElementById('stitchImg');
+	
+	let clickCount = 0;      // Licznik kliknięć
+	const maxClicks = 3;     // Maksymalna liczba kliknięć
+	
+	// Funkcja generująca konfetti
+	function createConfetti() {
+	const confettiContainer = document.getElementById('confetti');
+	for(let i=0;i<100;i++){
+		const conf = document.createElement('div');
+		conf.classList.add('confetti');
+		conf.style.left = Math.random()*100 + 'vw';
+		conf.style.animationDuration = (Math.random()*2 + 3) + 's';
+		conf.style.backgroundColor = `hsl(${Math.random()*360},100%,50%)`;
+		confettiContainer.appendChild(conf);
+		setTimeout(() => conf.remove(), 5000); // usuwa po 5 sekundach
+	}
+	}
+	
+	// Obsługa kliknięcia Stitcha z limitem
+	stitch.addEventListener('click', function(e){
+	e.preventDefault();
+	if(clickCount >= maxClicks) return; // jeśli limit, nic nie robimy
+	clickCount++;
+	
+	// Zmieniamy obrazek na chwilę
+	stitchImg.src = "stitch_happy.png";
+	
+	// Generujemy konfetti
+	createConfetti();
+	
+	// Po 3 sekundach wracamy do oryginału
+	setTimeout(() => {
+		stitchImg.src = "stitch.png";
+	}, 5000);
+	setTimeout(() => {
+		clickCount = 0;
+	}, 5000);
+	});
+
   </script>
 </body>
 </html>
