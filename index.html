@@ -2,44 +2,95 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Prezent dla [imię]</title>
+  <title>Wszystkiego najlepszego!</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       font-family: 'Trebuchet MS', sans-serif;
+      background: linear-gradient(to bottom, #a0e0ff, #ffffff);
       text-align: center;
-      background-color: #f0f7ff;
       color: #333;
-      padding: 40px;
+    }
+    h1 {
+      margin-top: 40px;
+      font-size: 2.5em;
+      color: #0077cc;
+      text-shadow: 1px 1px 2px #aaa;
+    }
+    p {
+      font-size: 1.2em;
+      margin: 20px auto;
+      max-width: 600px;
+      line-height: 1.5em;
     }
     img {
-      max-width: 80%;
-      border-radius: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      margin: 20px 0;
+      max-width: 300px;
+      border-radius: 15px;
+      margin: 20px auto;
+      display: block;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: gold;
+      border-radius: 50%;
+      animation: twinkle 2s infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.2; transform: scale(0.5);}
+      to { opacity: 1; transform: scale(1.2);}
     }
     a {
-      display: block;
-      margin: 10px 0;
-      font-size: 1.2em;
-      color: #0077cc;
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background: #0077cc;
+      color: white;
       text-decoration: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: background 0.3s;
     }
     a:hover {
-      text-decoration: underline;
+      background: #005fa3;
     }
   </style>
 </head>
 <body>
-  <h1>Hej [imię] 🎉</h1>
-  <p>Witaj w swojej tajnej bazie! Tu znajdziesz wszystkie ukryte wiadomości z QR kodów 🔍</p>
-  
-  <img src="images/stitch.jpg" alt="Stitch">
-  
-  <h2>Twoje sekcje:</h2>
-  <a href="page1.html">🪄 Sekret 1</a>
-  <a href="page2.html">🎮 Sekret 2</a>
-  <a href="page3.html">🌸 Sekret 3</a>
-  
-  <p>Więcej QR kodów czeka na Ciebie w prezencie 💙</p>
+  <div class="stars" id="stars"></div>
+
+  <h1>Wszystkiego najlepszego, [imię]!</h1>
+  <p>
+    Oto mała niespodzianka od mnie 💙.  
+    Mam nadzieję, że Twój dzień będzie pełen radości, uśmiechów i przygód, tak jak nasze wspólne gry, malowanie, rowerowe wyprawy i dubbing!  
+    Kliknij w obrazek, aby odkryć coś specjalnego 🎁
+  </p>
+
+  <a href="#"><img src="images/stitch.png" alt="Stitch" /></a>
+
+  <script>
+    // generowanie losowych gwiazdek w tle
+    const starsContainer = document.getElementById('stars');
+    for (let i=0; i<50; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.width = (Math.random()*4+2) + 'px';
+      star.style.height = star.style.width;
+      star.style.animationDuration = (Math.random()*3+1)+'s';
+      starsContainer.appendChild(star);
+    }
+  </script>
 </body>
 </html>
