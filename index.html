@@ -34,14 +34,16 @@
     }
 
     img {
-      max-width: 500px;
+      display: block;
+      width: 80%;
+      max-width: 400px;
+      /* ograniczenie maksymalnego rozmiaru na dużych ekranach */
       height: auto;
       border-radius: 15px;
       margin: 20px auto;
-      display: block;
       cursor: pointer;
       background: transparent;
-      margin: 20px auto;
+      transition: transform 0.3s ease;
     }
 
     .stars {
@@ -140,18 +142,28 @@
         font-size: 1.5em;
         padding: 15px 35px;
       }
+
+      img {
+        width: 90%;
+        /* większe dopasowanie dla telefonów */
+        max-width: none;
+        /* pozwól mu wypełnić szerokość ekranu */
+      }
     }
 
     #message {
-  color: #333; /* domyślny kolor tekstu */
-  transition: color 1s; /* ładna animacja zmiany koloru */
-}
+      color: #333;
+      /* domyślny kolor tekstu */
+      transition: color 1s;
+      /* ładna animacja zmiany koloru */
+    }
 
     #headerOrig {
-  color: #F64CFC; /* domyślny kolor tekstu */
-  transition: color 1s; /* ładna animacja zmiany koloru */
-}
-
+      color: #F64CFC;
+      /* domyślny kolor tekstu */
+      transition: color 1s;
+      /* ładna animacja zmiany koloru */
+    }
   </style>
 </head>
 
@@ -224,7 +236,7 @@
         cooldownTimeout = setTimeout(() => {
           stitchImg.src = "stitch.png";
           headerOrig.textContent = originalHeader;
-        headerOrig.style.color = "#F64CFC";
+          headerOrig.style.color = "#F64CFC";
 
           message.textContent = originalMessage;
           message.style.color = "#333";        // przywrócenie koloru
@@ -249,7 +261,7 @@
         cooldownTimeout = setTimeout(() => {
           stitchImg.src = "stitch.png";
           headerOrig.textContent = originalHeader;
-        headerOrig.style.color = "#F64CFC";
+          headerOrig.style.color = "#F64CFC";
           message.textContent = originalMessage;
           message.style.color = "#333";        // przywrócenie koloru
           clickCount = 0;
