@@ -1,170 +1,12 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wszystkiego najlepszego!</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Trebuchet MS', sans-serif;
-      background: linear-gradient(to bottom, #a0e0ff, #ffffff);
-      text-align: center;
-      color: #333;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
 
-    h1 {
-      margin-top: 40px;
-      font-size: 2em;
-      color: #F64CFC;
-      text-shadow: 1px 1px 2px #aaa;
-      padding: 0 10px;
-    }
-
-    p {
-      font-size: 1em;
-      margin: 20px auto;
-      max-width: 90%;
-      line-height: 1.5em;
-      padding: 0 10px;
-    }
-
-    img {
-      display: block;
-      width: 80%;
-      max-width: 400px;
-      /* ograniczenie maksymalnego rozmiaru na dużych ekranach */
-      height: auto;
-      border-radius: 15px;
-      margin: 20px auto;
-      cursor: pointer;
-      background: transparent;
-      transition: transform 0.3s ease;
-    }
-
-    .stars {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-
-    .star {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      background: gold;
-      border-radius: 50%;
-      animation: twinkle 2s infinite alternate;
-    }
-
-    @keyframes twinkle {
-      from {
-        opacity: 0.2;
-        transform: scale(0.5);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1.2);
-      }
-    }
-
-    a.button {
-      display: inline-block;
-      margin-top: 30px;
-      padding: 15px 25px;
-      background: #0077cc;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-      font-size: 1.2em;
-      transition: background 0.3s;
-    }
-
-    a.button:hover {
-      background: #005fa3;
-    }
-
-    /* Konfetti */
-    #confetti {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 999;
-    }
-
-    .confetti {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background-color: gold;
-      opacity: 0.9;
-      animation-name: fall;
-      animation-timing-function: linear;
-      animation-fill-mode: forwards;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(0) rotate(0deg);
-      }
-
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-      }
-    }
-
-    @media (min-width: 600px) {
-      h1 {
-        font-size: 2.5em;
-      }
-
-      p {
-        font-size: 1.2em;
-        max-width: 600px;
-      }
-
-      a.button {
-        font-size: 1.5em;
-        padding: 15px 35px;
-      }
-
-      img {
-        width: 90%;
-        /* większe dopasowanie dla telefonów */
-        max-width: none;
-        /* pozwól mu wypełnić szerokość ekranu */
-      }
-    }
-
-    #message {
-      color: #333;
-      /* domyślny kolor tekstu */
-      transition: color 1s;
-      /* ładna animacja zmiany koloru */
-    }
-
-    #headerOrig {
-      color: #F64CFC;
-      /* domyślny kolor tekstu */
-      transition: color 1s;
-      /* ładna animacja zmiany koloru */
-    }
-  </style>
+  <!-- Dołączamy style -->
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -172,10 +14,12 @@
 
   <h1 id="headerOrig">Wszystkiego najlepszego, Marta!</h1>
   <p id="message">
-    Oto mała niespodzianka od mnie 💙.
-    Mam nadzieję, że Twój dzień będzie pełen radości, uśmiechów i przygód, tak jak nasze wspólne gry, malowanie,
-    rowerowe wyprawy i dubbing!
+    Oto mała niespodzianka ode mnie 💙.<br>
+    Mam nadzieję, że Twój dzień będzie pełen radości, uśmiechów i przygód — tak jak nasze wspólne gry,
+    malowanie, rowerowe wyprawy i dubbing!<br>
     Kliknij w obrazek, aby odkryć coś specjalnego 🎁
+
+    Najlepszego od Andrzeja 🥳
   </p>
 
   <a href="#" id="stitch">
@@ -183,93 +27,11 @@
   </a>
 
   <div id="confetti"></div>
+  <div id="magic-background"></div>
 
-  <script>
-    const stitch = document.getElementById('stitch');
-    const stitchImg = document.getElementById('stitchImg');
-
-    let clickCount = 0;
-    const maxClicksNormal = 5;
-    let clickTimestamps = [];
-    let cooldownTimeout = null;
-    let cooldownEnd = 0; // czas zakończenia cooldownu
-    const originalMessage = message.innerHTML; // zapamiętujemy pierwotny format HTML
-    const COOLDOWN_TIME = 5000;
-    const originalHeader = headerOrig.innerHTML;
-
-    function createConfetti() {
-      const confettiContainer = document.getElementById('confetti');
-      for (let i = 0; i < 100; i++) {
-        const conf = document.createElement('div');
-        conf.classList.add('confetti');
-        conf.style.left = Math.random() * 100 + 'vw';
-        conf.style.animationDuration = (Math.random() * 2 + 3) + 's';
-        conf.style.backgroundColor = `hsl(${Math.random() * 360},100%,50%)`;
-        confettiContainer.appendChild(conf);
-        setTimeout(() => conf.remove(), COOLDOWN_TIME);
-      }
-    }
-
-    stitch.addEventListener('click', function (e) {
-      e.preventDefault();
-      const now = Date.now();
-      clickTimestamps.push(now);
-
-      // Usuwamy kliknięcia starsze niż 5 sekund
-      clickTimestamps = clickTimestamps.filter(t => now - t <= COOLDOWN_TIME);
-
-      // Bonusowy obrazek po 10 kliknięciach w 5 sekund
-      if (clickTimestamps.length >= 10) {
-        stitchImg.src = "angry.png"; // obrazek bonusowy
-        headerOrig.textContent = "PRZEMSAŃ KLIKAĆ!!!";
-        headerOrig.style.color = "#FF0000";
-        message.textContent = "Uważaj! Stitch poluje na Twojego palucha 😱";
-        message.style.color = "#FF0000"; // czerwony kolor podczas bonusu
-        clickTimestamps = []; // reset licznika
-
-        // Obliczamy ile czasu zostało do końca normalnego cooldownu
-        let remaining = Math.max(0, cooldownEnd - now);
-
-        if (cooldownTimeout) clearTimeout(cooldownTimeout);
-
-        // Powrót obrazka po pozostałym czasie
-        cooldownTimeout = setTimeout(() => {
-          stitchImg.src = "stitch.png";
-          headerOrig.textContent = originalHeader;
-          headerOrig.style.color = "#F64CFC";
-
-          message.textContent = originalMessage;
-          message.style.color = "#333";        // przywrócenie koloru
-          clickCount = 0;
-          cooldownTimeout = null;
-        }, remaining);
-
-        return; // brak konfetti
-      }
-
-      // Normalne kliknięcie
-      if (clickCount < maxClicksNormal) {
-        clickCount++;
-        stitchImg.src = "stitch_happy.png";
-        createConfetti();
-
-        // Reset cooldown
-        if (cooldownTimeout) clearTimeout(cooldownTimeout);
-
-        // Ustawiamy nowy timeout i zapamiętujemy czas zakończenia
-        cooldownEnd = now + COOLDOWN_TIME;
-        cooldownTimeout = setTimeout(() => {
-          stitchImg.src = "stitch.png";
-          headerOrig.textContent = originalHeader;
-          headerOrig.style.color = "#F64CFC";
-          message.textContent = originalMessage;
-          message.style.color = "#333";        // przywrócenie koloru
-          clickCount = 0;
-          cooldownTimeout = null;
-        }, COOLDOWN_TIME);
-      }
-    });
-  </script>
+  <!-- Dołączamy skrypt -->
+   
+  <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+  <script src="script.js"></script>
 </body>
-
 </html>
